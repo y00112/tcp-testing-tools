@@ -11,3 +11,6 @@
 >如果要部署的云服务器，请修改application.yaml 配置文件,以及main.js的 ip，以及 localServerPort
 
 ![img.png](img.png)
+
+
+![img_1.png](img_1.png)
