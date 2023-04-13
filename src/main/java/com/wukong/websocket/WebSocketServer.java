@@ -17,6 +17,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -65,10 +66,22 @@ public class WebSocketServer {
      * 连接关闭调用的方法
      */
     @OnClose
-    public void onClose(Session session) {
+    public static void onClose(Session session) {
         SessionSet.remove(session);
         int cnt = OnlineCount.decrementAndGet();
         log.info("有连接关闭，当前连接数为：{}", cnt);
+    }
+
+    public static void  removeSession(Integer port){
+        String sessionId = SESSION_MAP.get(port);
+        Iterator<Session> iterator = SessionSet.iterator();
+        while (iterator.hasNext()){
+            Session session = iterator.next();
+            if (session.getId().equals(sessionId)){
+                onClose(session);
+                SESSION_MAP.remove(port);
+            }
+        }
     }
 
     /**

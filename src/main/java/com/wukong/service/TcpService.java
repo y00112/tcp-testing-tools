@@ -12,4 +12,6 @@ public interface TcpService {
     Result connect();
 
     Result disconnect(Integer port);
+
+    Result onClose(Integer port);
 }

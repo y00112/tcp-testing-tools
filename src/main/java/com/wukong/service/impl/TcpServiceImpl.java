@@ -4,6 +4,7 @@ import com.wukong.common.Result;
 import com.wukong.service.AsyncService;
 import com.wukong.service.TcpService;
 import com.wukong.session.SessionFactory;
+import com.wukong.websocket.WebSocketServer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
+
+import static com.wukong.websocket.WebSocketServer.removeSession;
 
 /**
  * @author: 小山
@@ -49,10 +52,16 @@ public class TcpServiceImpl implements TcpService {
         return Result.success();
     }
 
+    @Override
+    public Result onClose(Integer port) {
+        removeSession(port);
+        return Result.success();
+    }
+
 
     private int getRandomPort() {
         // 生成随机端口号的代码
-        Integer port = (new Random().nextInt(65535) + 10000);
+        Integer port = (new Random().nextInt(8000) + 40000);
         return port;
     }
 }

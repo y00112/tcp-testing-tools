@@ -1,8 +1,16 @@
 let father = document.getElementById("father");
-let ip = "127.0.0.1";               // 所部署服务器的IP
+let ip = "localhost";               // 所部署服务器的IP
 let localServerPort = "10088";       // application.yaml 端口号
 let port = null;
 const btn = document.getElementById('button-send');
+
+const createTcpBtn = document.getElementById("create-tcp-btn");
+const createWebBtn = document.getElementById("create-web-btn");
+const closeBtn = document.getElementById("close-btn");
+
+createTcpBtn.disabled = false;
+createWebBtn.disabled = false;
+closeBtn.disabled = true;
 
 // 创建Tcp连接
 function createTcp() {
@@ -18,6 +26,9 @@ function createTcp() {
                 p.innerText = `服务器创建成功，建立在【${ip} : ${port}】 ${getNowDateTime()} `;
                 father.appendChild(p);
                 document.getElementById("onlineIp").innerText = `TCP服务器IP及端口【${ip} : ${port}】`;
+                createTcpBtn.disabled = true;
+                createWebBtn.disabled = true;
+                closeBtn.disabled = false;
                 father.scrollTop = father.scrollHeight
                 createWebSocket(port);
             }
@@ -26,9 +37,7 @@ function createTcp() {
 }
 
 function createWebSocket(port) {
-    let websocketObj = undefined;
-    websocketObj = new WebSocket(`ws://${ip}:${localServerPort}/ws/${port}`);
-
+    let websocketObj = new WebSocket(`ws://${ip}:${localServerPort}/ws/${port}`);
     // 接收到消息的回调方法
     websocketObj.onmessage = function (event) {
         setMessageInnerHTML(event.data);
@@ -47,11 +56,27 @@ function createWebSocket(port) {
     btn.addEventListener('click', function () {
         let input = document.getElementById("input-send");
         // 判断文本框数据是否为空
-        if (input.value.trim() !== "") {
+        if (input.value.trim() !== "" && websocketObj.readyState == 1) {
             // 将消息发送到服务器
             websocketObj.send(input.value);
         }
 
+    })
+
+    closeBtn.addEventListener('click',function () {
+        $.ajax({
+            type: "POST",
+            url: `http://${ip}:${localServerPort}/api/onclose`,
+            data: {
+                "port": port
+            },
+            success:function (data) {
+                let result = JSON.parse(JSON.stringify(data));
+                if (data.status == "200"){
+                    websocketObj = undefined;
+                }
+            }
+        })
     })
 
 }
@@ -73,6 +98,9 @@ function closeTcp() {
                 father.appendChild(p);
                 father.scrollTop = father.scrollHeight
                 document.getElementById("onlineIp").innerText = `服务器已关闭，请刷新重建。`;
+                createTcpBtn.disabled = false;
+                createWebBtn.disabled = false;
+                closeBtn.disabled = true;
             } else if (result.status == "500") {
                 let p = document.createElement("p");
                 p.innerText = `服务器已关闭，请刷新重建。 ${getNowDateTime()} `;

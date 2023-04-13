@@ -5,6 +5,7 @@ import com.wukong.service.TcpService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 
 /**
@@ -29,5 +30,11 @@ public class TcpController {
     @CrossOrigin
     public Result closeConnect(@RequestParam Integer port){
         return tcpService.disconnect(port);
+    }
+
+    @PostMapping("/onclose")
+    @CrossOrigin
+    public Result onClose(@RequestParam Integer port){
+        return tcpService.onClose(port);
     }
 }
