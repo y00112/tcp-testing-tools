@@ -1,0 +1,15 @@
+server:
+  port: 10088
+udp:
+  ip: 127.0.0.1
+  port: 5555
+spring:
+  redis:
+    host: localhost
+    port: 6379
+    password:
+    database: 0
+  mvc:
+    view:
+      prefix: /
+      suffix: .html

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tcp testing tools</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.4/jquery.js"></script>
+</head>
+
+<body style="margin-left: 50px;">
+<h2>Tcp testing tools</h2>
+<div>
+    <button onclick="createTcp()">创建Tcp服务器</button>
+    <button onclick="createTcp()">创建WebSocket服务器</button>
+    <button onclick="closeTcp()">关闭服务器</button>
+</div>
+<br>
+<div style="border: 1px solid black; width: 1100px; height: 400px; overflow-y:auto " id="father">
+
+</div>
+<br>
+<button onclick="clearDiv()">清空</button>
+<h5>TCP testing tools 使用Java语言开发的Tcp通信测试工具,主要用于测试 TCP 通信协议。</h5>
+<h5>15分钟服务端自动释放端口号。</h5>
+<h5>3分钟收不到客户端的消息服务端踢掉客户端。</h5>
+
+<input id="input-send" style="width: 800px; height: 20px;">
+<button id="button-send">发送</button>
+<h2 id="onlineIp"></h2>
+
+<script src="main.js"></script>
+
+</body>
+
+</html>
